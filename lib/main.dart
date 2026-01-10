@@ -1,5 +1,6 @@
+import 'package:di_chat_app/themes/light_mode.dart';
 import 'package:flutter/material.dart';
-import 'screens/chat_list_screen.dart';
+import 'pages/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,12 +13,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'DI Chat App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      home: const ChatListScreen(),
+      home: const LoginPage(),
+      theme: lightMode,
     );
   }
 }
