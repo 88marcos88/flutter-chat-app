@@ -2,13 +2,14 @@ import 'package:di_chat_app/components/my_button.dart';
 import 'package:di_chat_app/components/my_textfield.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  //email and pw text controllers
+class RegisterPage extends StatelessWidget {
   final TextEditingController _emailControloller = TextEditingController();
   final TextEditingController _pswController = TextEditingController();
+  final TextEditingController _confirmPwController = TextEditingController();
 
-  LoginPage({super.key});
-  void login() {}
+  RegisterPage({super.key});
+
+  void register() {}
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class LoginPage extends StatelessWidget {
 
           //welcomeback message
           Text(
-            "Welcome back you've been missed!",
+            "Let's create an account!",
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
               fontSize: 16,
@@ -42,10 +43,17 @@ class LoginPage extends StatelessWidget {
             obscureText: true,
             controller: _pswController,
           ),
+
+          //confirm pw textfield
+          MyTextField(
+            hintText: "Confirm Password",
+            obscureText: true,
+            controller: _confirmPwController,
+          ),
           const SizedBox(height: 10),
 
           //login button
-          MyButton(text: "Login", onTap: login),
+          MyButton(text: "Register", onTap: register),
 
           const SizedBox(height: 10),
 
@@ -54,13 +62,10 @@ class LoginPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Not a member? ",
+                "Alredy have an account? ",
                 style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
-              Text(
-                "register now",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              Text("Login now", style: TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
         ],
