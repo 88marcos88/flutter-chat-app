@@ -1,10 +1,12 @@
 import 'package:di_chat_app/auth/log_or_register.dart';
-import 'package:di_chat_app/pages/register_page.dart';
+import 'package:di_chat_app/firebase_options.dart';
 import 'package:di_chat_app/themes/light_mode.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'pages/login_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
