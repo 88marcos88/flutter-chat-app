@@ -1,4 +1,7 @@
+import 'package:di_chat_app/themes/themes_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -7,7 +10,37 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(title: Text("Settings")),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        title: Text("Settings"),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondary,
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        margin: const EdgeInsets.all(25.0),
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // dark mode toggle
+            const Text('Dark Mode'),
+
+            // switch toggle
+            CupertinoSwitch(
+              value: Provider.of<ThemesProvider>(
+                context,
+                listen: false,
+              ).isDarkMode,
+              onChanged: (value) => Provider.of<ThemesProvider>(
+                context,
+                listen: false,
+              ).toggleTheme(),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

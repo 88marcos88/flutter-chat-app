@@ -43,7 +43,7 @@ class ChatPage extends StatelessWidget {
           // display alll messages
           Expanded(child: _buildUserList()),
           // user input
-          _buildUserInput(),
+          _buildUserInput(context),
         ],
       ),
     );
@@ -101,7 +101,7 @@ class ChatPage extends StatelessWidget {
   }
 
   // build user input
-  Widget _buildUserInput() {
+  Widget _buildUserInput(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 50.0),
       child: Row(
@@ -116,8 +116,8 @@ class ChatPage extends StatelessWidget {
           ),
           // send button
           Container(
-            decoration: const BoxDecoration(
-              color: Colors.green,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
               shape: BoxShape.circle,
             ),
             margin: const EdgeInsets.only(right: 25.0),
