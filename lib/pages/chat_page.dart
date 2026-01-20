@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:di_chat_app/components/chat_bubble.dart';
 import 'package:di_chat_app/components/my_textfield.dart';
 import 'package:di_chat_app/services/auth/auth_service.dart';
 import 'package:di_chat_app/services/chat/chat_service.dart';
@@ -33,7 +34,10 @@ class ChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(title: Text('Chat with $reciverEmail')),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        title: Text('$reciverEmail'),
+      ),
       body: Column(
         children: [
           // display alll messages
@@ -89,26 +93,41 @@ class ChatPage extends StatelessWidget {
         crossAxisAlignment: isCurrentUser
             ? CrossAxisAlignment.end
             : CrossAxisAlignment.start,
-        children: [Text(data['message'])],
+        children: [
+          ChatBubble(message: data['message'], isCurrentUser: isCurrentUser),
+        ],
       ),
     );
   }
 
   // build user input
   Widget _buildUserInput() {
-    return Row(
-      children: [
-        // text field take up most of the space
-        Expanded(
-          child: MyTextField(
-            controller: _messageController,
-            hintText: 'Type your message here...',
-            obscureText: false,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 50.0),
+      child: Row(
+        children: [
+          // text field take up most of the space
+          Expanded(
+            child: MyTextField(
+              controller: _messageController,
+              hintText: 'Type your message here...',
+              obscureText: false,
+            ),
           ),
-        ),
-        // send button
-        IconButton(icon: Icon(Icons.send), onPressed: sendMessage),
-      ],
+          // send button
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.green,
+              shape: BoxShape.circle,
+            ),
+            margin: const EdgeInsets.only(right: 25.0),
+            child: IconButton(
+              icon: Icon(Icons.send, color: Colors.white),
+              onPressed: sendMessage,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
