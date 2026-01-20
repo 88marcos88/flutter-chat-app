@@ -5,10 +5,14 @@ import 'package:di_chat_app/services/auth/auth_service.dart';
 import 'package:di_chat_app/services/chat/chat_service.dart';
 import 'package:flutter/material.dart';
 
+/// Pantalla principal de la aplicación.
+///
+/// Muestra la lista de usuarios disponibles para chatear
+/// (excepto el usuario actualmente autenticado).
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  // chat & auth services
+  // Servicios
   final ChatService _chatService = ChatService();
   final AuthService _authService = AuthService();
 
@@ -16,27 +20,34 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
+
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
-        title: Text("Home"),
+        title: const Text("Home"),
       ),
-      drawer: MyDrawer(),
+
+      drawer: const MyDrawer(),
+
       body: _buildUserList(),
     );
   }
 
-  // build a list of users except the current user
+  /// Construye la lista de usuarios obtenida desde Firestore
   Widget _buildUserList() {
     return StreamBuilder(
       stream: _chatService.getUserStream(),
       builder: (context, snapshot) {
-        //error
+        // Error
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
+
+        // Cargando datos
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
+
+        // Lista de usuarios
         return ListView(
           children: snapshot.data!
               .map<Widget>((userData) => _buildUserListItem(userData, context))
@@ -46,31 +57,34 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  //build individual list titel for user
+  /// Construye cada usuario de la lista
+  ///
+  /// Evita mostrar el usuario actualmente logueado
   Widget _buildUserListItem(
     Map<String, dynamic> userData,
     BuildContext context,
   ) {
-    //display all users except current user
     final currentUser = _authService.currentUser;
+
+    // No mostrar al usuario actual
     if (currentUser != null && userData["email"] != currentUser.email) {
       return UserTile(
         text: userData['email'],
         onTap: () {
-          //navigate to chat page with selected user
+          // Navega al chat con el usuario seleccionado
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ChatPage(
                 reciverEmail: userData['email'],
-                receiverId: userData["uid"],
+                receiverId: userData['uid'],
               ),
             ),
           );
         },
       );
-    } else {
-      return Container();
     }
+
+    return const SizedBox.shrink();
   }
 }

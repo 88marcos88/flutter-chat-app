@@ -1,30 +1,46 @@
-import "package:cloud_firestore/cloud_firestore.dart";
-import "package:firebase_auth/firebase_auth.dart";
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+/// Servicio encargado de gestionar toda la autenticación
+/// de usuarios mediante Firebase Authentication.
+///
+/// Incluye:
+/// - Registro de usuarios
+/// - Inicio de sesión
+/// - Cierre de sesión
+/// - Acceso al usuario actual
+/// - Guardado de datos en Firestore
 class AuthService {
-  //instance of auth & firestore
+  /// Instancia de FirebaseAuth
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  /// Instancia de Firestore
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  //get current user
-  User? get currentUser {
-    return _auth.currentUser;
-  }
+  /// Devuelve el usuario actualmente autenticado (si existe)
+  User? get currentUser => _auth.currentUser;
 
-  //sing in
-  Future<UserCredential> singInWithEmailAndPassword(
+  // =======================
+  // LOGIN
+  // =======================
+
+  /// Inicia sesión con email y contraseña
+  ///
+  /// Devuelve un [UserCredential] si el login es correcto.
+  /// Lanza una excepción si ocurre un error.
+  Future<UserCredential> signInWithEmailAndPassword(
     String email,
     String password,
   ) async {
     try {
-      //sign in user
+      // Autenticación con Firebase
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // save user info in a separate doc
-      _firestore.collection("Users").doc(userCredential.user!.uid).set({
+      // Guarda/actualiza el usuario en Firestore
+      await _firestore.collection("Users").doc(userCredential.user!.uid).set({
         'email': email,
         'uid': userCredential.user!.uid,
       });
@@ -35,15 +51,24 @@ class AuthService {
     }
   }
 
-  //sing up
-  Future<UserCredential> singUpWithEmailPassword(String email, password) async {
+  // =======================
+  // REGISTRO
+  // =======================
+
+  /// Registra un nuevo usuario con email y contraseña
+  ///
+  /// Crea el usuario en Firebase Auth y guarda sus datos en Firestore.
+  Future<UserCredential> signUpWithEmailPassword(
+    String email,
+    String password,
+  ) async {
     try {
-      //create user
+      // Crear usuario
       UserCredential userCredential = await _auth
           .createUserWithEmailAndPassword(email: email, password: password);
 
-      // save user info if ir does not exist
-      _firestore.collection("Users").doc(userCredential.user!.uid).set({
+      // Guardar datos del usuario en Firestore
+      await _firestore.collection("Users").doc(userCredential.user!.uid).set({
         'email': email,
         'uid': userCredential.user!.uid,
       });
@@ -54,11 +79,12 @@ class AuthService {
     }
   }
 
-  //sign out
+  // =======================
+  // LOGOUT
+  // =======================
 
+  /// Cierra la sesión del usuario actual
   Future<void> signOut() async {
-    return await _auth.signOut();
+    await _auth.signOut();
   }
-
-  //errors
 }

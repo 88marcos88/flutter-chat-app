@@ -2,46 +2,49 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:di_chat_app/models/message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+/// Servicio encargado de gestionar toda la lógica del chat.
+///
+/// Se encarga de:
+/// - Obtener usuarios
+/// - Enviar mensajes
+/// - Escuchar mensajes en tiempo real
 class ChatService {
-  // get instance of firestore & auth
+  /// Instancia de Firestore
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  /// Instancia de FirebaseAuth
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // get user stream
-  /*
-  Stream<List<Map<String, dynamic> =
+  // =========================
+  // USUARIOS
+  // =========================
 
-  [{
-    'email': 'test@gmail.com'
-    'id': 'asdasdasd123123'
-  },
-  { 
-    'email': 'test2@gmail.com',
-    'id': 'asdasdasd123124'
-  },]
-
-  */
+  /// Obtiene todos los usuarios registrados en Firestore
+  ///
+  /// Devuelve una lista de mapas con la información del usuario.
   Stream<List<Map<String, dynamic>>> getUserStream() {
     return _firestore.collection('Users').snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
-        // go through each individual user
-        final user = doc.data();
-        // return user
-        return user;
+        return doc.data();
       }).toList();
     });
   }
 
-  //send message
+  // =========================
+  // MENSAJES
+  // =========================
 
-  Future<void> sendMessage(String receiverId, message) async {
-    // get current user info
+  /// Envía un mensaje al usuario indicado
+  Future<void> sendMessage(String receiverId, String message) async {
+    // Usuario actual
     final String currentUserId = _auth.currentUser!.uid;
     final String currentUserEmail = _auth.currentUser!.email!;
+
+    // Marca de tiempo
     final Timestamp timestamp = Timestamp.now();
 
-    // create a new message
-    Message newMessage = Message(
+    // Crear mensaje
+    final Message newMessage = Message(
       senderId: currentUserId,
       senderEmail: currentUserEmail,
       receiverId: receiverId,
@@ -49,12 +52,12 @@ class ChatService {
       timestamp: timestamp,
     );
 
-    // construct chat room ID for the two users
-    List<String> ids = [currentUserId, receiverId];
-    ids.sort(); // sort to ensure consistent order
-    String chatRoomId = ids.join('_');
+    // Crear ID único del chat (siempre igual para ambos usuarios)
+    final List<String> ids = [currentUserId, receiverId];
+    ids.sort();
+    final String chatRoomId = ids.join('_');
 
-    // add new meassage to the database
+    // Guardar mensaje en Firestore
     await _firestore
         .collection('chatRooms')
         .doc(chatRoomId)
@@ -62,12 +65,12 @@ class ChatService {
         .add(newMessage.toMap());
   }
 
-  //get messages stream
-  Stream<QuerySnapshot> getMessages(String userId, otherUserId) {
-    // construct chat room ID for the two users
-    List<String> ids = [userId, otherUserId];
-    ids.sort(); // sort to ensure consistent order
-    String chatRoomId = ids.join('_');
+  /// Obtiene el stream de mensajes entre dos usuarios
+  Stream<QuerySnapshot> getMessages(String userId, String otherUserId) {
+    // Generar ID único del chat
+    final List<String> ids = [userId, otherUserId];
+    ids.sort();
+    final String chatRoomId = ids.join('_');
 
     return _firestore
         .collection('chatRooms')

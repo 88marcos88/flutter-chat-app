@@ -3,40 +3,46 @@ import 'package:di_chat_app/components/my_button.dart';
 import 'package:di_chat_app/components/my_textfield.dart';
 import 'package:flutter/material.dart';
 
+/// Pantalla de registro de usuario.
+///
+/// Permite crear una nueva cuenta usando email y contraseña.
+/// Valida que ambas contraseñas coincidan antes de crear el usuario.
 class RegisterPage extends StatelessWidget {
-  final TextEditingController _emailControloller = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pswController = TextEditingController();
   final TextEditingController _confirmPwController = TextEditingController();
 
-  // tap to go to register
+  /// Callback para volver a la pantalla de login
   final void Function()? onTap;
 
   RegisterPage({super.key, required this.onTap});
 
+  /// Registra un nuevo usuario en Firebase
   void register(BuildContext context) async {
-    // get auth service
-    final _auth = AuthService();
+    final auth = AuthService();
 
-    // password match -> create account
+    // Comprobar que las contraseñas coinciden
     if (_pswController.text == _confirmPwController.text) {
       try {
-        _auth.singUpWithEmailPassword(
-          _emailControloller.text,
+        await auth.signUpWithEmailPassword(
+          _emailController.text,
           _pswController.text,
         );
       } catch (e) {
         showDialog(
           context: context,
-          builder: (context) => AlertDialog(title: Text(e.toString())),
+          builder: (context) => AlertDialog(
+            title: const Text("Register error"),
+            content: Text(e.toString()),
+          ),
         );
       }
-    }
-    // password dont match -> error message
-    else {
+    } else {
+      // Contraseñas no coinciden
       showDialog(
         context: context,
         builder: (context) =>
-            const AlertDialog(title: Text("Passwords don't match!")),
+            const AlertDialog(title: Text("Passwords don't match")),
       );
     }
   }
@@ -46,11 +52,14 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          //logo
+          // Logo
           Image.asset('assets/images/logo.png'),
 
-          //welcomeback message
+          const SizedBox(height: 20),
+
+          // Texto informativo
           Text(
             "Let's create an account!",
             style: TextStyle(
@@ -58,46 +67,52 @@ class RegisterPage extends StatelessWidget {
               fontSize: 16,
             ),
           ),
-          const SizedBox(height: 10),
 
-          //email textfield
+          const SizedBox(height: 15),
+
+          // Email
           MyTextField(
             hintText: "Email",
             obscureText: false,
-            controller: _emailControloller,
+            controller: _emailController,
           ),
 
-          //pw textfield
+          const SizedBox(height: 10),
+
+          // Password
           MyTextField(
             hintText: "Password",
             obscureText: true,
             controller: _pswController,
           ),
 
-          //confirm pw textfield
+          const SizedBox(height: 10),
+
+          // Confirm password
           MyTextField(
             hintText: "Confirm Password",
             obscureText: true,
             controller: _confirmPwController,
           ),
-          const SizedBox(height: 10),
 
-          //login button
+          const SizedBox(height: 15),
+
+          // Register button
           MyButton(text: "Register", onTap: () => register(context)),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
 
-          //register now
+          // Volver al login
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Alredy have an account? ",
+                "Already have an account? ",
                 style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
               GestureDetector(
                 onTap: onTap,
-                child: Text(
+                child: const Text(
                   "Login now",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),

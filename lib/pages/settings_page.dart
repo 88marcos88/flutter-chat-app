@@ -3,6 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Pantalla de ajustes de la aplicación.
+///
+/// Permite al usuario activar o desactivar el modo oscuro.
+/// Utiliza Provider para gestionar el estado del tema.
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
@@ -10,33 +14,40 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
+
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
-        title: Text("Settings"),
+        title: const Text("Settings"),
       ),
+
       body: Container(
+        margin: const EdgeInsets.all(25),
+        padding: const EdgeInsets.all(16),
+
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.secondary,
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: BorderRadius.circular(12),
         ),
-        margin: const EdgeInsets.all(25.0),
-        padding: const EdgeInsets.all(16.0),
+
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // dark mode toggle
-            const Text('Dark Mode'),
+            // Texto del ajuste
+            const Text('Dark Mode', style: TextStyle(fontSize: 16)),
 
-            // switch toggle
+            // Interruptor de modo oscuro
             CupertinoSwitch(
               value: Provider.of<ThemesProvider>(
                 context,
                 listen: false,
               ).isDarkMode,
-              onChanged: (value) => Provider.of<ThemesProvider>(
-                context,
-                listen: false,
-              ).toggleTheme(),
+
+              onChanged: (value) {
+                Provider.of<ThemesProvider>(
+                  context,
+                  listen: false,
+                ).toggleTheme();
+              },
             ),
           ],
         ),
