@@ -27,14 +27,18 @@ class UserTile extends StatelessWidget {
         ),
 
         child: Row(
-          children: const [
+          children: [
             // Icono del usuario
-            Icon(Icons.person),
+            const Icon(Icons.person),
 
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
 
             // Nombre o email del usuario
             // (se pasa desde el constructor)
+            Text(
+              text,
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+            ),
           ],
         ),
       ),

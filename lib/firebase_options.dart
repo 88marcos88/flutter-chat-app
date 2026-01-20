@@ -38,22 +38,24 @@ class DefaultFirebaseOptions {
     }
   }
 
-  /// Configuración para Web
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: '***',
-    appId: '***',
-    messagingSenderId: '***',
+    apiKey: 'AIzaSyBv7IabhD_p3SibtnJoIgP3Zezpxw0Lw7M',
+    appId: '1:172308856931:web:1e710552207bcf22fd7856',
+    messagingSenderId: '172308856931',
     projectId: 'chatapp-26b3c',
     authDomain: 'chatapp-26b3c.firebaseapp.com',
     storageBucket: 'chatapp-26b3c.firebasestorage.app',
   );
 
-  /// Configuración para Android
+  /// Configuración para Web
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: '***',
-    appId: '***',
-    messagingSenderId: '***',
+    apiKey: 'AIzaSyBnG1g2JHmvJTH3jxVudf6XKn3MpYqcMYQ',
+    appId: '1:172308856931:android:f287b6170b7dde19fd7856',
+    messagingSenderId: '172308856931',
     projectId: 'chatapp-26b3c',
     storageBucket: 'chatapp-26b3c.firebasestorage.app',
   );
+
+  /// Configuración para Android
 }
