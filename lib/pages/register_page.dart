@@ -55,50 +55,73 @@ class RegisterPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Logo
-          Image.asset('assets/images/logo.png'),
+          Semantics(
+            label: 'Logotipo de la aplicación',
+            image: true,
+            child: Image.asset('assets/images/logo.png'),
+          ),
 
           const SizedBox(height: 20),
 
           // Texto informativo
-          Text(
-            "Let's create an account!",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontSize: 16,
+          Semantics(
+            label: 'Mensaje informativo de registro',
+            child: Text(
+              "Let's create an account!",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 16,
+              ),
             ),
           ),
 
           const SizedBox(height: 15),
 
           // Email
-          MyTextField(
-            hintText: "Email",
-            obscureText: false,
-            controller: _emailController,
+          Semantics(
+            label: 'Campo para introducir el correo electrónico',
+            textField: true,
+            child: MyTextField(
+              hintText: "Email",
+              obscureText: false,
+              controller: _emailController,
+            ),
           ),
 
           const SizedBox(height: 10),
 
           // Password
-          MyTextField(
-            hintText: "Password",
-            obscureText: true,
-            controller: _pswController,
+          Semantics(
+            label: 'Campo para introducir la contraseña',
+            textField: true,
+            child: MyTextField(
+              hintText: "Password",
+              obscureText: true,
+              controller: _pswController,
+            ),
           ),
 
           const SizedBox(height: 10),
 
           // Confirm password
-          MyTextField(
-            hintText: "Confirm Password",
-            obscureText: true,
-            controller: _confirmPwController,
+          Semantics(
+            label: 'Campo para confirmar la contraseña',
+            textField: true,
+            child: MyTextField(
+              hintText: "Confirm Password",
+              obscureText: true,
+              controller: _confirmPwController,
+            ),
           ),
 
           const SizedBox(height: 15),
 
           // Register button
-          MyButton(text: "Register", onTap: () => register(context)),
+          Semantics(
+            label: 'Botón para registrarse en la aplicación',
+            button: true,
+            child: MyButton(text: "Register", onTap: () => register(context)),
+          ),
 
           const SizedBox(height: 15),
 
@@ -110,11 +133,15 @@ class RegisterPage extends StatelessWidget {
                 "Already have an account? ",
                 style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
-              GestureDetector(
-                onTap: onTap,
-                child: const Text(
-                  "Login now",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+              Semantics(
+                label: 'Volver a la pantalla de inicio de sesión',
+                button: true,
+                child: GestureDetector(
+                  onTap: onTap,
+                  child: const Text(
+                    "Login now",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],

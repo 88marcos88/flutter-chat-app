@@ -46,41 +46,59 @@ class LoginPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Logo de la app
-          Image.asset('assets/images/logo.png'),
+          Semantics(
+            label: 'Logotipo de la aplicación',
+            image: true,
+            child: Image.asset('assets/images/logo.png'),
+          ),
 
           const SizedBox(height: 20),
 
           // Mensaje de bienvenida
-          Text(
-            "Welcome back, you've been missed!",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontSize: 16,
+          Semantics(
+            label: 'Mensaje de bienvenida',
+            child: Text(
+              "Welcome back, you've been missed!",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 16,
+              ),
             ),
           ),
 
           const SizedBox(height: 20),
 
           // Campo email
-          MyTextField(
-            hintText: "Email",
-            obscureText: false,
-            controller: _emailController,
+          Semantics(
+            label: 'Campo para introducir el correo electrónico',
+            textField: true,
+            child: MyTextField(
+              hintText: "Email",
+              obscureText: false,
+              controller: _emailController,
+            ),
           ),
 
           const SizedBox(height: 10),
 
           // Campo contraseña
-          MyTextField(
-            hintText: "Password",
-            obscureText: true,
-            controller: _pswController,
+          Semantics(
+            label: 'Campo para introducir la contraseña',
+            textField: true,
+            child: MyTextField(
+              hintText: "Password",
+              obscureText: true,
+              controller: _pswController,
+            ),
           ),
-
           const SizedBox(height: 15),
 
           // Botón login
-          MyButton(text: "Login", onTap: () => login(context)),
+          Semantics(
+            label: 'Botón para iniciar sesión',
+            button: true,
+            child: MyButton(text: "Login", onTap: () => login(context)),
+          ),
 
           const SizedBox(height: 15),
 
@@ -92,11 +110,15 @@ class LoginPage extends StatelessWidget {
                 "Not a member? ",
                 style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
-              GestureDetector(
-                onTap: onTap,
-                child: const Text(
-                  "Register now",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+              Semantics(
+                label: 'Acceder a la pantalla de registro',
+                button: true,
+                child: GestureDetector(
+                  onTap: onTap,
+                  child: const Text(
+                    "Register now",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],
